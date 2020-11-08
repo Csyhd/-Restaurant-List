@@ -1,6 +1,5 @@
 # **我的餐廳清單**
 提供餐廳清單,可供搜尋餐廳,各餐廳詳細資訊查詢
----
 
 ## 功能
 - 主頁顯示餐廳基本資訊與評分
@@ -11,18 +10,18 @@
 ## 如何使用
 
 1.下載
-    使用Terminal  輸入 git clone https://github.com/Csyhd/-Restaurant-List.git
+    + 使用Terminal  輸入 git clone https://github.com/Csyhd/-Restaurant-List.git
 
 2.進入
-    使用cd 進入到下載完成的資料夾
+    +使用cd 進入到下載完成的資料夾
 
 3.安裝使用套件
-    npm install
+    + npm install
 
 4.執行
-    npm run dev 
+    + npm run dev 
 
 5.執行成功
-    Terminal 顯示start
+    + Terminal 顯示start
 
 開始使用吧！
