@@ -21,7 +21,7 @@
   <div class="row">
     <div class="col-md-10 col-12 mx-auto">
       <div class="card-columns">
-        {{#each restaurants }}
+        {{#each list }}
         <a href="/restaurants/{{this.id}}" class="text-secondary">
           <div class="card mb-3">
             <img class="card-img-top" src="{{this.image}}" alt="{{this.name}}">
@@ -34,6 +34,12 @@
                 {{this.rating}}
                 <i class="fas fa-star fa-xs"></i>
               </span>
+              <a href="/restaurants/new">Create</a>
+              <a href="/restaurants/{{ this._id }}">detail</a>
+              <a href="/restaurants/{{ this._id }}/edit">edit</a>
+              <form action="/restaurants/{{ this._id }}/delete" method="POST" style="display: inline;">
+                <button type="submit">delete</button>
+              </form>
             </div>
           </div>
         </a>

@@ -13,7 +13,7 @@ app.set('view engine', 'handlebars')
 app.use(express.static('public'))
 app.use(bodyParser.urlencoded({ extended: true }))
 
-mongoose.connect('mongodb://localhost/restaurant_2.0', { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect('mongodb://localhost/restaurant_2_0', { useNewUrlParser: true, useUnifiedTopology: true })
 
 db.on('error', () => {
   console.log('mongodb error!!')
@@ -23,22 +23,67 @@ db.once('open', () => {
 })
 
 app.get('/', (req, res) => {
-  res.render('index', { restaurants: restaurantList.results })
+  RestaurantList.find()
+    .lean()
+    .then(list => res.render('index', { list }))
+    .catch(error => console.error(error))
 })
 
-app.get('/search', (req, res) => {
-  const keyword = req.query.keyword
-  const restaurants = restaurantList.results.filter(restaurant => {
-    return restaurant.name.toLowerCase().includes(keyword.toLowerCase())
-  })
-  res.render('index', { restaurants: restaurants, keyword: keyword })
+// app.get('/search', (req, res) => {
+//   const keyword = req.query.keyword
+//   const restaurants = restaurantList.results.filter(restaurant => {
+//     return restaurant.name.toLowerCase().includes(keyword.toLowerCase())
+//   })
+//   res.render('index', { restaurants: restaurants, keyword: keyword })
+// })
+
+// app.get('/restaurants/:restaurants_id', (req, res) => {
+//   const restaurant = restaurantList.results.find(restaurant => {
+//     return restaurant.id.toString() === req.params.restaurants_id
+//   })
+//   res.render('show', { restaurant: restaurant })
+// })
+
+app.get('/restaurants/new', (req, res) => {
+  return res.render('new')
 })
 
-app.get('/restaurants/:restaurants_id', (req, res) => {
-  const restaurant = restaurantList.results.find(restaurant => {
-    return restaurant.id.toString() === req.params.restaurants_id
-  })
-  res.render('show', { restaurant: restaurant })
+app.post('/restaurants', (req, res) => {
+  const name = req.body
+  console.log(name)
+  return RestaurantList.create(name)
+    .then(() => res.redirect('/'))
+    .catch(error => console.log(error))
+})
+
+app.get('/restaurants/:id', (req, res) => {
+  const id = req.params.id
+  return RestaurantList.findById(id)
+    .lean()
+    .then((list) => {
+      return res.render('show', { list })
+    })
+    .catch(error => console.log(error))
+})
+
+app.get('/restaurants/:id/edit', (req, res) => {
+  const id = req.params.id
+  return RestaurantList.findById(id)
+    .lean()
+    .then((list) => res.render('edit', { list }))
+    .catch(error => console.log(error))
+})
+
+app.post('/restaurants/:id/edit', (req, res) => {
+  const id = req.params.id
+  const name = req.body.name
+  return RestaurantList.findById(id)
+    .then(list => {
+      list.name = name
+      return list.save()
+    })
+    .then(() => res.redirect(`/restaurants/${id}`))
+    .catch(error => console.log(error))
 })
 
 app.listen(port, () => {
